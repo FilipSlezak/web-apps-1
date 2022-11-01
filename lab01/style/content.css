@@ -1,0 +1,132 @@
+:root {
+  --primary-font: "Roboto", sans-serif;
+  --secondary-font: "Poppins", sans-serif;
+  --white: #fff;
+  --header-background: #282a35;
+  --nav-background: #e7e9eb;
+  --nav-hover-background: #ccc;
+  --text-white: #f1f1f1;
+  --text-dark: #000;
+  --nav-text-color: var(--text-dark);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--secondary-font);
+  font-weight: 700;
+  color: var(--text-white);
+}
+
+p,
+span {
+  color: var(--text-dark);
+}
+
+a {
+  color: var(--black);
+  text-decoration: underline;
+  text-decoration-color: var(--black);
+  transition: color;
+  transition-timing-function: ease-in-out;
+}
+
+body > header {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  background-color: var(--header-background);
+}
+
+body > header > h1 {
+  font-size: 2.8rem;
+}
+
+body > main > article > img {
+  aspect-ratio: 16 / 9;
+  width: 66%;
+  object-fit: contain;
+}
+
+body > main > article > header {
+  margin: 0 0 2.4rem;
+}
+
+body > main > article > header > h2 {
+  color: var(--text-dark);
+  font-size: 2.4rem;
+  padding: 0;
+  margin: 0;
+}
+
+body > main > article:not(:last-of-type) {
+  margin-bottom: 2.4rem;
+}
+
+body > aside {
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+
+body > aside > a > img {
+  aspect-ratio: 16 / 9;
+  max-width: 100%;
+}
+
+body > footer {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  align-content: flex-end;
+  justify-content: flex-end;
+  box-sizing: border-box;
+  padding: 0 2rem;
+  background-color: var(--header-background);
+}
+
+body > footer > p {
+  color: var(--text-white);
+}
+
+body > nav {
+  background-color: var(--nav-background);
+}
+
+body > nav > ul > li > a:hover {
+  background-color: var(--nav-hover-background);
+  font-weight: 700;
+}
+
+body > nav > ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  padding-top: 1rem;
+}
+
+body > nav > ul > li > a {
+  padding-left: 1.5rem;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  align-content: flex-start;
+  justify-content: flex-start;
+  height: 2rem;
+  width: 100%;
+  font-size: 1rem;
+  background-color: transparent;
+  transition-property: background-color;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+  text-decoration: none;
+  font-weight: 400;
+  color: var(--nav-text-color);
+}

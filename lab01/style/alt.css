@@ -1,0 +1,12 @@
+:root {
+  --header-background: #427d8f;
+  --nav-background: #51d675;
+  --nav-hover-background: #116b29;
+  --text-dark: #4f5d61;
+  --text-white: red;
+  --nav-text-color: var(--text-white);
+}
+
+body > main > article > header > h2 {
+  color: red;
+}
