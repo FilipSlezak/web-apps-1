@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Task list</title>
+    <meta name="author" content="Filip Ślęzak" />
+    <link rel="stylesheet" href="./styles/style.css" />
+  </head>
+  <body>
+    <main>
+      <header>
+        <h1>TODO lista</h1>
+      </header>
+      <input id="search" placeholder="Search" />
+      <ul id="tasks-list"></ul>
+      <div id="controls">
+        <input id="new-task-content" placeholder="Task" />
+        <input
+          id="new-task-end-date"
+          type="date"
+          placeholder="When is ending"
+        />
+        <button id="new-task-confirm">Add task</button>
+        <button id="clear-list">Clear tasks</button>
+      </div>
+    </main>
+    <script type="module" src="./scripts/index.js"></script>
+  </body>
+</html>
