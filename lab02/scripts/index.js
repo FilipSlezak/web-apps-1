@@ -90,6 +90,17 @@ const createListItem = (task) => {
   return li;
 };
 
+const highlightTermInListItem = (task, term) => {
+  const expression = `/${term}/gi`;
+  const listItemTextElement = document.querySelector(`[data-task-id="${task.id}"] p`);
+  const children = [];
+  const matches = task.content.matchAll(RegExp(expression));
+  for (const match of matches) {
+    const start = match.index;
+    const end = match.index + match[0].length;
+  }
+}
+
 const drawList = (tasks) => {
   const listElement = document.getElementById("tasks-list");
   const searchTerm = (
