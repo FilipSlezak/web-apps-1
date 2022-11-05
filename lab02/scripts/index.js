@@ -94,20 +94,35 @@ const createListItem = (task, term = undefined) => {
 
 const highlightTermInListItem = (task, term) => {
   const expression = `${term}`;
-  let res = task.content.slice();
-  const matches = task.content.matchAll(RegExp(expression, "gi"));
+  const copy = task.content.slice();
+  let res = [];
+  const regExp = RegExp(expression, "gi");
+  const matches = task.content.matchAll(regExp);
   const spanStart = "<span>";
   const spanEnd = "</span>";
+  const indexToSlice = [];
   for (const match of matches) {
-    const start = match.index;
-    const end = match.index + match[0].length;
-    res = res.slice(0, start) + spanStart + res.slice(start);
-    res =
-      res.slice(0, end + spanStart.length) +
-      spanEnd +
-      res.slice(end + spanStart.length);
+    indexToSlice.push(match.index);
+    indexToSlice.push(match.index + match[0].length);
   }
-  return res;
+  indexToSlice.forEach((toSlice, index) => {
+    if (index) {
+      res.push(copy.slice(indexToSlice[index - 1], toSlice));
+    } else {
+      res.push(copy.slice(0, toSlice));
+    }
+  });
+  res = res.map((s, index) => {
+    if ((index + 1) % 2 == 0) {
+      return s + spanEnd;
+    } else {
+      return s + spanStart;
+    }
+  });
+  if (indexToSlice[indexToSlice.length - 1] != copy.length - 1) {
+    res.push(copy.slice(indexToSlice[indexToSlice.length - 1]));
+  }
+  return res.join("");
 };
 
 const drawList = (tasks) => {
