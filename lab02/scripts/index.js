@@ -1,15 +1,10 @@
 // Signals list to handle dingling event listeners from click to edit functionality
 let signals = {};
-/*
- * Returns State
- * */
+
 const loadStore = () => {
   return JSON.parse(localStorage.getItem("tasks"));
 };
 
-/*
- * Saves State to localStorage
- */
 const saveStore = (data) => {
   const stringified = JSON.stringify(data);
   localStorage.setItem("tasks", stringified);
@@ -69,7 +64,7 @@ const handleListItemTextClickEvent = (task) => {
   p.remove();
 };
 
-const createListItem = (task) => {
+const createListItem = (task, term = undefined) => {
   // li with span inside
   const controller = new AbortController();
   signals[task.id] = controller;
@@ -78,8 +73,15 @@ const createListItem = (task) => {
   removeButton.innerHTML = "<span>&#10006;</span>";
   removeButton.addEventListener("click", () => removeItem(task.id));
   const p = document.createElement("p");
-  const pText = document.createTextNode(task.content);
-  p.appendChild(pText);
+  if (term && term.length > 2) {
+    p.insertAdjacentHTML("beforeend", highlightTermInListItem(task, term));
+  } else {
+    const pText = document.createTextNode(task.content);
+    p.appendChild(pText);
+  }
+  if (task.date) {
+    p.appendChild(document.createTextNode(` (${task.date})`));
+  }
   p.appendChild(removeButton);
   p.addEventListener("click", () => handleListItemTextClickEvent(task));
   const li = document.createElement("li");
@@ -91,15 +93,22 @@ const createListItem = (task) => {
 };
 
 const highlightTermInListItem = (task, term) => {
-  const expression = `/${term}/gi`;
-  const listItemTextElement = document.querySelector(`[data-task-id="${task.id}"] p`);
-  const children = [];
-  const matches = task.content.matchAll(RegExp(expression));
+  const expression = `${term}`;
+  let res = task.content.slice();
+  const matches = task.content.matchAll(RegExp(expression, "gi"));
+  const spanStart = "<span>";
+  const spanEnd = "</span>";
   for (const match of matches) {
     const start = match.index;
     const end = match.index + match[0].length;
+    res = res.slice(0, start) + spanStart + res.slice(start);
+    res =
+      res.slice(0, end + spanStart.length) +
+      spanEnd +
+      res.slice(end + spanStart.length);
   }
-}
+  return res;
+};
 
 const drawList = (tasks) => {
   const listElement = document.getElementById("tasks-list");
@@ -116,7 +125,7 @@ const drawList = (tasks) => {
     filteredTasks = tasks;
   }
   const listItems = filteredTasks.map((task) => {
-    const li = createListItem(task);
+    const li = createListItem(task, searchTerm);
     return li;
   });
   listElement.replaceChildren(...listItems);
@@ -169,6 +178,9 @@ const addTaskEventHandler = () => {
       id: newId,
       content: taskContent,
     };
+    if (taskEndDate) {
+      newTask.date = taskEndDateElement.value;
+    }
     // Add task to localStorage
     const tasks = loadStore() || [];
     tasks.push(newTask);
@@ -193,6 +205,7 @@ const handleClearEvent = () => {
 const clearSearchElement = () => {
   const searchElement = document.getElementById("search");
   searchElement.value = "";
+  refreshList();
 };
 
 const clearNewTaskContent = () => {
