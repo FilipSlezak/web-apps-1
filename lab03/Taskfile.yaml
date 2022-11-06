@@ -1,0 +1,6 @@
+version: "3"
+
+tasks:
+  default:
+    cmds:
+      - browser-sync start -s --port 3000 --watch -f "./index.html" -f "./style/*" -f "./scripts/*"
