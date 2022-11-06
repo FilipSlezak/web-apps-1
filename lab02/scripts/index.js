@@ -228,25 +228,20 @@ const clearNewTaskContent = () => {
   el.value = "";
 };
 
-const main = () => {
-  refreshList();
-  const addTaskButton = document.getElementById("new-task-confirm");
-  addTaskButton.addEventListener("click", addTaskEventHandler);
-  const searchElement = document.getElementById("search");
-  searchElement.addEventListener("keyup", handleSearchEvent);
-  const clearButton = document.getElementById("clear-list");
-  clearButton.addEventListener("click", handleClearEvent);
-  const controlsElement = document.getElementById("controls");
-  // Global events
-  document.addEventListener("mousedown", (event) => {
-    const { x, y } = event;
-    const { top, bottom, left, right } =
-      controlsElement.getBoundingClientRect();
-    if (x < left || x > right || y < top || y > bottom) {
-      // Clicked outside controls space
-      clearNewTaskContent();
-    }
-  });
-};
-
-document.body.onload = main;
+refreshList();
+const addTaskButton = document.getElementById("new-task-confirm");
+addTaskButton.addEventListener("click", addTaskEventHandler);
+const searchElement = document.getElementById("search");
+searchElement.addEventListener("keyup", handleSearchEvent);
+const clearButton = document.getElementById("clear-list");
+clearButton.addEventListener("click", handleClearEvent);
+const controlsElement = document.getElementById("controls");
+// Global events
+document.addEventListener("mousedown", (event) => {
+  const { x, y } = event;
+  const { top, bottom, left, right } = controlsElement.getBoundingClientRect();
+  if (x < left || x > right || y < top || y > bottom) {
+    // Clicked outside controls space
+    clearNewTaskContent();
+  }
+});
