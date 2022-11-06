@@ -24,10 +24,10 @@ const showRemoveButton = (button) => {
   button.className = "remove";
 };
 
-const handleEditEvent = (event, li, task) => {
+const handleEditEvent = (event, task) => {
+  const li = document.querySelector(`[data-task-id="${task.id}"]`);
   const input = document.querySelector(`[data-task-id="${task.id}"] input`);
-  if (!input) {
-    signals[task.id].abort();
+  if (!input || (input && input.className === "hidden")) {
     return;
   }
   const { x, y } = event;
@@ -42,26 +42,19 @@ const handleEditEvent = (event, li, task) => {
         return t;
       })
     );
-    refreshList();
     signals[task.id].abort();
+    refreshList();
   }
 };
 
 const handleListItemTextClickEvent = (task) => {
-  const li = document.querySelector(`[data-task-id="${task.id}"]`);
+  const input = document.querySelector(`[data-task-id="${task.id}"] input`);
   const p = document.querySelector(`[data-task-id="${task.id}"] p`);
-  const input = document.createElement("input");
-  input.value = task.content;
-  li.appendChild(input);
+  if (!input || !p) return;
   input.focus();
-  document.addEventListener(
-    "click",
-    (event) => handleEditEvent(event, li, task),
-    {
-      signal: signals[task.id].signal,
-    }
-  );
-  p.remove();
+  input.value = task.content;
+  input.className = "";
+  p.className = "hidden";
 };
 
 const createListItem = (task, term = undefined) => {
@@ -72,6 +65,8 @@ const createListItem = (task, term = undefined) => {
   removeButton.className = "remove hidden";
   removeButton.innerHTML = "<span>&#10006;</span>";
   removeButton.addEventListener("click", () => removeItem(task.id));
+  const input = document.createElement("input");
+  input.className = "hidden";
   const p = document.createElement("p");
   if (term && term.length > 2) {
     p.insertAdjacentHTML("beforeend", highlightTermInListItem(task, term));
@@ -87,8 +82,12 @@ const createListItem = (task, term = undefined) => {
   const li = document.createElement("li");
   li.setAttribute("data-task-id", task.id);
   li.appendChild(p);
+  li.appendChild(input);
   li.addEventListener("mouseover", () => showRemoveButton(removeButton));
   li.addEventListener("mouseleave", () => hideRemoveButton(removeButton));
+  document.addEventListener("click", (event) => handleEditEvent(event, task), {
+    signal: signals[task.id].signal,
+  });
   return li;
 };
 
@@ -147,8 +146,9 @@ const drawList = (tasks) => {
 };
 
 const refreshList = () => {
-  if (Object.keys(signals)?.length) {
-    signals = {};
+  const signalKeys = Object.keys(signals);
+  if (signalKeys && signalKeys.length > 0) {
+    signalKeys.forEach((key) => signals[key].abort());
   }
   const tasks = loadStore();
   if (tasks && tasks.length) {
@@ -238,11 +238,6 @@ const main = () => {
   clearButton.addEventListener("click", handleClearEvent);
   const controlsElement = document.getElementById("controls");
   // Global events
-  document.addEventListener("click", (event) => {
-    if (event.target != searchElement) {
-      clearSearchElement();
-    }
-  });
   document.addEventListener("mousedown", (event) => {
     const { x, y } = event;
     const { top, bottom, left, right } =

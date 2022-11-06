@@ -25,3 +25,7 @@ ul > li > p {
 ul > li > p > span {
   background-color: yellow;
 }
+
+.hidden {
+  display: none;
+}
