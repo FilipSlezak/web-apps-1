@@ -1,7 +1,8 @@
 {
   "extends": "eslint:recommended",
   "parserOptions": {
-    "ecmaVersion": "latest"
+    "ecmaVersion": "latest",
+    "sourceType": "module"
   },
   "rules": {
     "prefer-const": "error"
@@ -10,5 +11,8 @@
     "browser": true,
     "node": true,
     "es6": true
+  },
+  "globals": {
+    "L": true
   }
 }
