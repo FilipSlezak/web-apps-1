@@ -1,10 +1,6 @@
 /* eslint-disable no-undef */
 let map = null;
 
-window.onload = () => {
-  map = L.map("map").setView([0, 0], 13);
-};
-
 const notify = async (title) => {
   if (!title) {
     return;
@@ -70,12 +66,17 @@ geoButtonElement.addEventListener("click", async () => {
   if (!localization) {
     return;
   }
-  console.log(localization);
 });
 
-getGeoLocation().then((position) => {
-  const { latitude, longitude } = position.coords;
-  console.log(position);
-  console.log({ latitude, longitude });
-  map.setView([latitude, longitude], 13);
-});
+window.onload = () => {
+  map = L.map("map").setView([0, 0], 13);
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+  getGeoLocation().then((position) => {
+    const { latitude, longitude } = position.coords;
+    map.setView([latitude, longitude], 13);
+    L.marker([latitude, longitude]).addTo(map);
+  });
+};
